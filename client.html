@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <p>The messages received from server</p>
+    <ul id="list"></ul>
+    <script>
+      const list = document.querySelector('#list');
+
+      const subscribe = async () => {
+        let response = await fetch('http://localhost:4000/messages');
+
+        if (response.status == 502) {
+          await subscribe();
+        } else if (response.status !== 200) {
+          console.log(response.statusText);
+
+          // Reconnect in one second
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          await subscribe();
+        } else {
+          const message = await response.text();
+          const li = document.createElement('li');
+          li.textContent = message;
+          list.appendChild(li);
+
+          await subscribe();
+        }
+      };
+
+      subscribe();
+    </script>
+  </body>
+</html>
