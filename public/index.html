@@ -13,7 +13,7 @@
       const list = document.querySelector('#list');
 
       const subscribe = async () => {
-        let response = await fetch('http://localhost:4000/messages');
+        let response = await fetch('/messages');
 
         if (response.status == 502) {
           await subscribe();

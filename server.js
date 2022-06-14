@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 let subscribers = {};
 
 const subscribe = (req, res) => {
-  const id = Math.random();
+  const id = Date.now();
 
   subscribers[id] = res;
 
@@ -26,6 +27,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/messages', (req, res) => {
   subscribe(req, res);
