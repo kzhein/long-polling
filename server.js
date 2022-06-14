@@ -7,6 +7,11 @@ let subscribers = {};
 const subscribe = (req, res) => {
   const id = Date.now();
 
+  res.header({
+    'Content-Type': 'text/plain;charset=utf-8',
+    'Cache-Control': 'no-cache, must-revalidate',
+  });
+
   subscribers[id] = res;
 
   req.on('close', () => {
