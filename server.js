@@ -1,28 +1,25 @@
 const express = require('express');
 const path = require('path');
 
-let subscribers = {};
+const subscribers = new Map();
 
 const subscribe = (req, res) => {
-  const id = Math.random();
-
   res.header({
     'Content-Type': 'text/plain;charset=utf-8',
     'Cache-Control': 'no-cache, must-revalidate',
   });
 
-  subscribers[id] = res;
+  subscribers.set(req, res);
 
   req.on('close', () => {
-    delete subscribers[id];
+    subscribers.delete(req);
   });
 };
 
 const publish = message => {
-  for (let id in subscribers) {
-    const res = subscribers[id];
+  subscribers.forEach(res => {
     res.send(message);
-  }
+  });
 };
 
 const app = express();
