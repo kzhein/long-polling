@@ -4,7 +4,7 @@ const path = require('path');
 let subscribers = {};
 
 const subscribe = (req, res) => {
-  const id = Date.now();
+  const id = Math.random();
 
   res.header({
     'Content-Type': 'text/plain;charset=utf-8',
@@ -23,8 +23,6 @@ const publish = message => {
     const res = subscribers[id];
     res.send(message);
   }
-
-  subscribers = {};
 };
 
 const app = express();
